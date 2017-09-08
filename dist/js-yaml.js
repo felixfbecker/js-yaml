@@ -1,4 +1,5 @@
-/* js-yaml 3.9.1 https://github.com/nodeca/js-yaml */(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.jsyaml = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+-n /* js-yaml 3.9.1 https://github.com/nodeca/js-yaml */
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.jsyaml = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
 
@@ -634,7 +635,7 @@ function writeFlowMapping(state, level, object) {
       pairBuffer;
 
   for (index = 0, length = objectKeyList.length; index < length; index += 1) {
-    pairBuffer = '';
+    pairBuffer = state.condenseFlow ? '"' : '';
 
     if (index !== 0) pairBuffer += ', ';
 
@@ -647,7 +648,7 @@ function writeFlowMapping(state, level, object) {
 
     if (state.dump.length > 1024) pairBuffer += '? ';
 
-    pairBuffer += state.dump + ':' + (state.condenseFlow ? '' : ' ');
+    pairBuffer += state.dump + (state.condenseFlow ? '"' : '') + ':' + (state.condenseFlow ? '' : ' ');
 
     if (!writeNode(state, level, objectValue, false, false)) {
       continue; // Skip this pair because of invalid value.
@@ -1956,7 +1957,7 @@ function readBlockMapping(state, nodeIndent, flowIndent) {
         allowCompact = true;
 
       } else {
-        throwError(state, 'incomplete explicit mapping pair; a key node is missed');
+        throwError(state, 'incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line');
       }
 
       state.position += 1;
